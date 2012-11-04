@@ -1,0 +1,5 @@
+#!/bin/bash
+sed -i "s/\r//" $1
+cat $1 | col -b > newfile
+cat file | tr -d "\r" > newfile
+cat file | tr -d "\015" > newfile

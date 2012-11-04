@@ -1,0 +1,22 @@
+# bash completion for xinyi's tomcat script
+
+#have tomcat &&
+_tomcat()
+{
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	opts="catalina configtest daemon digest setclasspath shutdown startup tool-wrapper version status"
+
+	COMPREPLY=( $(compgen -W "${opts}" ${cur}) )
+}
+complete -F _tomcat tomcat tomcat.sh
+
+# Local variables:
+# # mode: shell-script
+# # sh-basic-offset: 4
+# # sh-indent-comment: t
+# # indent-tabs-mode: nil
+# # End:
+# # ex: ts=4 sw=4 et filetype=sh

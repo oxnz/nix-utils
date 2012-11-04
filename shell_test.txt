@@ -1,0 +1,97 @@
+[SHELL水平测试] [OVERVIEW 篇] 
+   1. 有很多种 shell, 你熟悉几种？ 各个 shell 的 home page 在那里？
+    2. 为什么说 zsh 是目前为止功能最为强大的 shell.
+    3. 为什么说 pdksh 功能较弱？
+    4. ksh88 与 ksh93 有何区别？
+    5. 为什么 shell 编程最好用 ksh?
+    6. 你的系统都有哪些 shell? 版本是多少？
+    7. 你知道 POSIX 吗？最新版本是多少？和你的 shell 有什么关系？
+    8. /sbin/sh 和 /bin/sh 有何区别？
+    9. 你分析过 1000　行以上的 shell 程序吗？
+    10. 各种 shell 的变量名长度有何限制？
+    11. 各种 shell 的 array size 有何限制？
+    12. FIFO 比 co-process　有什么优点？
+    13. (..)　产生的 subshell 与调用另一个脚本产生的 subshell 有何不同？
+    14. shell 中的函数可以递归吗？设计时要注意什么？
+    15. 如何用 subshell 产生的多个值改变多个 shell 中的变量？
+    16. File pattern 与 regular expression 有什么不同？
+    17. shell 中含有大量文档．不想在每行之前用 # 注释．　有那两种方法可以实现？
+    18. 用 shell 程序安装配置一个二进制可执行软件．希望将被安装软件含在 shell 程序中形成一个
+    　　安装文件，　可以吗？
+    19. 可以在一个shell 程序里包含 ksh 及 perl　两种代码吗？
+    20. 如何保证 shell 程序只有单一 instance 运行？　(有难度, 绝非一个 ps 命令可以搞定）
+    21. 当有同名的 alias, function, builtin command, external command 时，如何知道并控制其运行顺序？
+    22. 如何在自定义 function　中调用同名的　builtin command ?
+    23. 怎样运行各种 shell 时具有 login shell 的行为?
+    24. 为何 ksh, rksh, pfksh 都是同一个 hard link? 功能却不同？
+    25. 当 while read .. 这样的语句用于 pipe　右侧时，需注意什么？
+    26. 对于多个相连的 pipe，最后的返回码是 pipe 中那个命令的？　如何取得所有命令的返回码？
+    27. cmd  >a  2>a 和 cmd  >a  2>&1　为什么不同？
+    28. Stdin, Stderr 可以关闭吗? 有什么结果?
+    29. GNU tools 与其他 Unix 上的相比有什么特点？　为什么说不能过分依赖 GNU　扩展？
+    30. VI　及 VIM 对行长度及 file size 有什么限制？
+    31. 请写出对 field 1　(数字)，　field 3 (数字倒序)，　field 3 (ascii) 进行排序的完整语句．
+    32. 如何用 diff　及其他工具写一个版本控制系统？（要有　check　in, check　out, file lock ..　等功能）
+[ SHELL 水平测试 ][ SED 篇 ]
+    1. 你能看懂　sed one-lines 中的每一条语句吗？
+    2. /regex/! command 与 /regex/ !command 有什么区别？
+    3. 你能熟练使用 N,n, P,p,D,d,H,h,G,g,x,:,b,t 吗？
+    4. 什么是 sed 高级编程中的 lookup table 技术
+    5. sed debuger 的原理是什么？
+    6. 为什么 sed 的 guru 和 fans 比 awk 的多．(请看 yahoo groups)
+    下面几题根据使用的技术，难度不同．（难度 最小:１,最大:５)
+    7. 将数据文件中的每个词的第一个字母变成大写．　(难度: 2 - 4)
+    8. 在 sed 中实现记数器．可加　1 或减　1. (难度: 3 - 4)
+    9. 提取 html 文件中 table 中每个单员的内容(table 可嵌套）．(难度: 4 - 5)
+    每一个 cell　做为一个单员输出：
+    Table #１, Row #1, Column #1
+    Contents .......
+    Table #１, Row #1, Column #2
+    Contents .......
+    10. 一般的 sed 的 regex 的匹配都是 greedy 的。如何用 sed 实现 lazy 匹配?
+[ SHELL 水平测试 ][ AWK 篇 ]
+    1. awk, oawk, nawk, gawk, mawk 有什么区别？
+    2. 在一个 awk 文件中,  第一行可以如下吗?
+    #! /bin/awk -F: -f
+    3. awk -F"" 与 awk -F "" 有区别吗?
+    4. 可以这样设置 FS 吗?  
+       FS = "[ \t]+\|[ \t]+"
+    5. gawk 有一个扩展表达式与其他 GNU 工具不同, 是哪个, 为什么?
+    6. 那两种方法可以实现大小写无关匹配?
+    7. 下列两句有何区别?
+    awk '$0 ~ "[ \t\n]"'
+    awk '$0 ~ /[ \t\n]/'
+    8. FS=" " 和 FS=" +" 有何区别?
+    9. 如何将每一个字符作为一个 field ?
+    10. 如何将整个文件作为一个 field ?
+    11. RS="" 与 RS="\n\n+" 有何区别?
+    12. NR 和 FNR 有何区别?
+    13. getline < "file" 改变那些 builtin 变量?
+    14. 如何不打印最后一个 field? (不用循环）
+    15. $1 ~ /aaa/ 与 /aaa/ ~ $1 有何区别?
+    16. a = /a/ 是什么意思?
+    17. awk 中的 array 可以排序吗?
+    18. 如何将 awk 中得到的值赋给 shell 变量.
+    19. 如何模拟二维数组？
+    20. 你的 awk 数组最多可能的单元是多少？有限制没有？
+    21. 你的 awk 中 field number, record length 及　file size 有何限制？
+    22. awk 中如何删除 array 及 关闭管道？
+    23. 如何完成 rev 功能？
+    24. 如何在 awk 中使用 coprocess？
+    25. 你写过 100 行以上的 awk 程序吗？　
+[ SHELL 水平测试 ][ REGEX 篇 ]
+    1. 传统 regex, POSIX regex, GNU regex, PCRE 都有什么特点及异同之处？
+    2. ERE 是 BRE 的 super set 吗？
+    3. ERE看起来强大，但使用 ERE 有一点最不爽, 是什么？
+    4. 依赖 GNU 扩展的危害是什么？
+    5. Back reference 可以嵌套吗？
+    6. DFA 和 NFA 有什么特点及区别？
+    7. 常用的 [e]grep, [ng]awk, [g]sed, perl 哪些是 DFA？　哪些是 NFA?　因此这些程序具有哪些相应的特点？
+    8. Greedy regex　和 lazy regex　有何区别？　哪些工具是　lazy regex．
+    9. 猜一猜一个符合 RFC 标准的 email adderss　大概需要多长的 regex 来匹配？
+    10. 你是否有这样的经历： 某个使用过的 regex， 用在另个软件中却不行。
+    也就是说你无法确定某个 regex 在同一系统的不同软件中或在不同系统的相同软件中肯定能用?
+附加题
+    1. 为什么说 CU 的整体较为业余, 但 shell 版的水平相对较高?
+    2. 为什么 shell 版中的大部分高手都是玩 Linux 的, 而低手往往是 Sco unix, HP-UX 等其他平台的?
+    3. 为什么当低手怯怯地抛出一个问题, 高手快速地给出了漂亮的解答, 却往往最后并没有解决低手的问题?

@@ -1,0 +1,2 @@
+sed -i 's/$/\r/' file
+sed -i 's/$\x0d/' file
