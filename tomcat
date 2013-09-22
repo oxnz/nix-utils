@@ -1,5 +1,7 @@
 #!/bin/sh
-
+# Copyright (c) 2011-2013 oxnz, All rights reserved
+# Description:
+# Command Line Interface to Control tomcat server status
 # TODO:
 # add restart entry
 
