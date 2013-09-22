@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "Add self to wheel groups
+sed -i -e '/^wheel/s/root/root,xinyi/' /etc/groups
+echo "Install vim"
+cd /usr/ports/editors/vim && make instal clean

@@ -1,0 +1,2 @@
+MASTER_SITE_BACKUP?=http://mirror.bjtu.edu.cn/FreeBSD/distfiles/${DIST_SUBDIR}/
+MASTER_SITE_OVERRIDE?=${MASTER_SITE_BACKUP}

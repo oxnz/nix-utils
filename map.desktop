@@ -1,0 +1,27 @@
+[Desktop Entry]
+Name=Maps
+GenericName=Maps
+Icon=map
+Type=Application
+Exec=x-www-browser map.baidu.com
+StartupNotify=true
+Terminal=false
+Actions=Google-Map;QQ;QZone;xinyi-sf;xinyi-git;localhost;
+[Desktop Action Google-Map]
+Name=Google Map
+Exec=x-www-browser ditu.google.com
+[Desktop Action QQ]
+Name=QQ
+Exec=x-www-browser web.qq.com
+[Desktop Action QZone]
+Name=QZone
+Exec=x-www-browser user.qzone.qq.com/185068085
+[Desktop Action xinyi-sf]
+Name=xinyi blog
+Exec=x-www-browser xinyi.sourceforge.net
+[Desktop Action xinyi-git]
+Name=github
+Exec=x-www-browser https://github.com/yunxinyi
+[Desktop Action localhost]
+Name=localhost
+Exec=x-www-browser localhost
