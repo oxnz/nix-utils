@@ -1,5 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2011-2013 oxnz, All rights reserved
+#
+# File		: tomcatctl
 # Description:
 # Command Line Interface to Control tomcat server status
 # TODO:
@@ -15,7 +17,7 @@ TOMCAT_HOME="/home/a2di/Installs/apache-tomcat-7.0.30"
 
 readConfig()
 {
-	TOM_CONF="../tomcat00"
+	TOM_CONF="./tomcat.conf"
 	[ -f $TOM_CONF ] && source $TOM_CONF ||	echo "warning: missing config file [$TOM_CONF]"
 	if [ -z "$JAVA_HOME" ]
 	then
