@@ -1,7 +1,7 @@
 # bash completion for xinyi's tomcat script
 
-#have tomcat &&
-_tomcat()
+#have tomcatctl &&
+_tomcatctl()
 {
 	local cur prev opts
 	COMPREPLY=()
@@ -11,7 +11,7 @@ _tomcat()
 
 	COMPREPLY=( $(compgen -W "${opts}" ${cur}) )
 }
-complete -F _tomcat tomcat tomcat.sh
+complete -F _tomcatctl tomcatctl tomcatctl.sh
 
 # Local variables:
 # # mode: shell-script
