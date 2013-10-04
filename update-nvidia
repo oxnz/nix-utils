@@ -2,7 +2,7 @@
 
 # link: http://ubuntuforums.org/showthread.php?t=835573
 
-# Set thsi to the exact path of the nvidia driver you plan to use
+# Set this to the exact path of the nvidia driver you plan to use
 # It is recommended to use a symlink here so that this script doesn't
 # have to be modified when you change driver versions.
 
