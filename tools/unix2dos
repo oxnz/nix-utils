@@ -19,6 +19,7 @@ OPTION='unix2dos'
 
 function usage() {
 	printf "Usage: $0 <srcfile> [dstfile]\n"
+	echo "-h --help print this message and exit"
 }
 
 function convert() {
@@ -57,13 +58,28 @@ function convert() {
 #	xxd "$dfile"
 }
 
-if [ $# -eq 1 ]; then
-	SRCFILE="$1"
+if [ $# -eq 0 ]; then
+	usage
+	exit 0
+elif [ $# -eq 1 ]; then
+	case $1 in
+		-[hH]|-help|--help)
+			usage
+			exit 0
+			;;
+		-*)
+			echo "unknown option: $1"
+			exit 1
+			;;
+		*)
+			SRCFILE="$1"
+			;;
+	esac
 elif [ $# -eq 2 ]; then
 	SRCFILE="$1"
 	DSTFILE="$2"
 else
-	usage
+	echo "too many arguments"
 	exit 1
 fi
 
