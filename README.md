@@ -1,15 +1,24 @@
 # commonly used shell scripts
 
-##dot-vimrc
+##gnu-apt.pl
 
-`.vimrc` file
+a perl script used to list and fetch tar balls from ftp.gnu.org
 
-##dot-gitignore_global
-global gitignore file
+##live-hosts
+
+a script used to find out live hosts in LAN
+
+##jre-install.sh
+
+a shell script intend for automated install jre or jdk
+
+##unix2dos & dos2unix
+
+convert text file format.
 
 ##tomcatctl
 
-a simple script to control tomcat.
+a script can be used to control tomcat server like start|stop|restart|...
 
 ##tomcatctl.bash_completion
 
@@ -19,16 +28,9 @@ bash completion script for tomcatctl
 
 install jre and make soft link to Mozilla folder, etc.
 
-##setup-git.sh
+##git-setup.sh
 
 setup git environment
-
-##bash_aliases
-
-widely used aliases
-
-##bash_profile-[linux, mac]
-bash configure file `bash_profile-linux`, `bash_profile-mac`
 
 ##update-nvidia
 auto complie nvidia kernel module after each time of kernel update.
@@ -38,9 +40,6 @@ auto complie nvidia kernel module after each time of kernel update.
 postinstall actions
 
 ##backup.sh
-backup script
-##setup-git.sh
-setting up git environment after install
 
-##[vim-tutor.md](./vim-tutor.md)
-a simple vim tutor
+backup script
+
