@@ -9,35 +9,38 @@ def debug():
 	print get_text(xml);
 	print get_elements_by_path(xml, "custom-translation/content");
 	#print_translations(xml, False, False);
+        
 def get_elements_by_path(xml, elem):
 	if type(xml) == type(''):
-		xml = [xml];
-	if type(elem) == type(''):
-		elem = elem.split('/');
+		xml = [xml]
+        if type(elem) == type(''):
+		elem = elem.split('/')
 	if (len(xml) == 0):
-		return [];
+		return []
 	elif (len(elem) == 0):
-		return xml;
+		return xml
 	elif (len(elem) == 1):
-		result = [];
+		result = []
 		for item in xml:
-			result += get_elements(item, elem[0]);
-		return result;
+			result += get_elements(item, elem[0])
+		return result
 	else:
-		subitems = [];
+		subitems = []
 		for item in xml:
-			subitems += get_elements(item, elem[0]);
-		return get_elements_by_path(subitems, elem[1:]);
-textre = re.compile("\!\[CDATA\[(.*?)\]\]", re.DOTALL);
+			subitems += get_elements(item, elem[0])
+		return get_elements_by_path(subitems, elem[1:])
+
+textre = re.compile("\!\[CDATA\[(.*?)\]\]", re.DOTALL)
 def get_text(xml):
-	match = re.search(textre, xml);
+	match = re.search(textre, xml)
 	if not match:
-		return xml;
-	return match.group(1);
+		return xml
+	return match.group(1)
+
 def get_elements(xml, elem):
-	p = re.compile("<" + elem + ">" + "(.*?)</" + elem + ">", re.DOTALL);
-	it = p.finditer(xml);
-	result = [];
+	p = re.compile("<" + elem + ">" + "(.*?)</" + elem + ">", re.DOTALL)
+	it = p.finditer(xml)
+	result = []
 	for m in it:
 		result.append(m.group(1));
 	return result;
@@ -47,9 +50,11 @@ BOLD = "\033[1m";
 UNDERLINE = "\033[4m";
 NORMAL = "\033[m";
 RED = "\033[1;31m"
+
 def crawl_xml(queryword):
 	return urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q="
         + urllib.quote_plus(queryword) + "&xmlDetail=true&doctype=xml").read();
+
 def print_translations(xml, with_color, detailed):
         #print xml;
 	original_query = get_elements(xml, "original-query");
@@ -99,16 +104,16 @@ def print_translations(xml, with_color, detailed):
 			#        break
 	
 def usage():
-	print "usage: dict.py word_to_translate";
+	print "usage: dict.py word_to_translate"
 def main(argv):
 	if len(argv) <= 0:
-		usage();
-		#debug();
-		sys.exit(1);
-	xml = crawl_xml(" ".join(argv));
-	#print_translations(xml, True, False);
-	print_translations(xml, True, True);
+		usage()
+		#debug()
+		sys.exit(1)
+	xml = crawl_xml(" ".join(argv))
+	#print_translations(xml, True, False)
+	print_translations(xml, True, True)
 
 
 if __name__ == "__main__":
-	main(sys.argv[1:]);
+	main(sys.argv[1:])
