@@ -104,7 +104,9 @@ def print_translations(xml, with_color, detailed):
 			#        break
 	
 def usage():
-	print "usage: dict.py word_to_translate"
+	print """usage: dict [word]
+        word: the word you want to translate
+        If you want to translate a sentence, use double quote"""
 def main(argv):
 	if len(argv) <= 0:
 		usage()
@@ -113,7 +115,6 @@ def main(argv):
 	xml = crawl_xml(" ".join(argv))
 	#print_translations(xml, True, False)
 	print_translations(xml, True, True)
-
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
