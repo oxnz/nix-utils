@@ -45,6 +45,7 @@ def get_elements(xml, elem):
 		result.append(m.group(1));
 	return result;
 GREEN = "\033[1;32m";
+BLUE = "\033[1;34m";
 DEFAULT = "\033[0;49m";
 BOLD = "\033[1m";
 UNDERLINE = "\033[4m";
@@ -66,11 +67,11 @@ def print_translations(xml, with_color, detailed):
 	for cus in custom_translations:
 		source = get_elements_by_path(cus, "source/name");
 		
-		print RED + "Translations from " + source[0] + DEFAULT;
+		print NORMAL + "Translations from " + GREEN + source[0] + DEFAULT;
 		contents = get_elements_by_path(cus, "translation/content");
 		if with_color:
 			for content in contents[0:5]:
-				print GREEN + get_text(content) + DEFAULT;
+				print BLUE + get_text(content) + DEFAULT;
 		else:
 			for content in contents[0:5]:
 				print get_text(content);
@@ -82,7 +83,7 @@ def print_translations(xml, with_color, detailed):
                 webtrans = get_elements(trans, "web-translation");
 		for web in webtrans[0:5]:
 			if not printed:
-				print RED + "Translations from yodao:" + DEFAULT;
+				print NORMAL + "Translations from " + GREEN + "yodao:" + DEFAULT;
 				printed = True;
 	        	keys = get_elements(web, "key");
 			values = get_elements_by_path(web, "trans/value");
@@ -92,7 +93,7 @@ def print_translations(xml, with_color, detailed):
 			#summary = summaries[0].strip();
                         #lines = get_elements(summary, "line");
 		        if with_color:
-			       	print BOLD +  get_text(key) + ":\t" +DEFAULT + GREEN + get_text(value) + NORMAL;
+			       	print BOLD +  get_text(key) + ":\t" +DEFAULT + BLUE + get_text(value) + NORMAL;
                                 #for line in lines:
                                 #        print GREEN + get_text(line) + DEFAULT;
 				#print get_text(summary) + DEFAULT;
@@ -104,17 +105,20 @@ def print_translations(xml, with_color, detailed):
 			#        break
 	
 def usage():
-	print """usage: dict [word]
-        word: the word you want to translate
+	print """usage: dict options [word|"sentence"]
+    Options:
+        -h  show this message and exit
+    Hints:
+        word|"sentence": the word you want to translate
         If you want to translate a sentence, use double quote"""
+
 def main(argv):
 	if len(argv) <= 0:
 		usage()
 		#debug()
 		sys.exit(1)
 	xml = crawl_xml(" ".join(argv))
-	#print_translations(xml, True, False)
-	print_translations(xml, True, True)
+	print_translations(xml, with_color = True, detailed = True)
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

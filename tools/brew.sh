@@ -1,4 +1,5 @@
 #!/bin/sh
+# Copyright (C) 2013 Oxnz, All rights reserved.
 
 
 URL='https://raw.github.com/mxcl/homebrew/master/Library/Formula/'
@@ -10,6 +11,9 @@ function show() {
 function main() {
 	if [ $# -le 1 ]; then
 		echo "Usage: <option> [name]"
+		echo "  options:"
+		echo "\tshow\tshow instructions to install package specified by name"
+		echo "\tlist\tlist available packages"
 		exit 1
 	fi
 
