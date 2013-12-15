@@ -44,6 +44,7 @@ def get_elements(xml, elem):
 	for m in it:
 		result.append(m.group(1));
 	return result;
+
 GREEN = "\033[1;32m";
 BLUE = "\033[1;34m";
 DEFAULT = "\033[0;49m";
@@ -108,9 +109,14 @@ def usage():
 	print """usage: dict options [word|"sentence"]
     Options:
         -h  show this message and exit
-    Hints:
         word|"sentence": the word you want to translate
-        If you want to translate a sentence, use double quote"""
+        If you want to translate a sentence, use double quote
+    Examples:
+        define hello
+        lookup the explanation of word 'hello'
+        define "what if"
+        lookup the explanation of phrase 'what if'
+        """
 
 def main(argv):
 	if len(argv) <= 0:
