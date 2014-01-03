@@ -13,8 +13,8 @@ EOH
 			;;
 		*)
 			while [ $# -ge 1 ]; do
-				#echo "$url${1// /+}"
-				open "$url${1// /+}"
+				#echo "$url"$(echo ${1// /+} | xxd -plain | sed 's/\(..\)/%\1/g')
+				open "$url"$(echo ${1// /+} | xxd -plain | sed 's/\(..\)/%\1/g')
 				shift
 			done
 			;;
