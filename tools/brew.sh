@@ -2,38 +2,53 @@
 # Copyright (C) 2013 Oxnz, All rights reserved.
 
 
-URL='https://raw.github.com/mxcl/homebrew/master/Library/Formula/'
+URL='https://raw.github.com/Homebrew/homebrew/master/Library/Formula/'
 
 function show() {
 	curl ${URL}${1}.rb
 }
 
-function main() {
-	if [ $# -le 1 ]; then
-		echo "Usage: <option> [name]"
-		echo "  options:"
-		echo "\tshow\tshow instructions to install package specified by name"
-		echo "\tlist\tlist available packages"
-		exit 1
-	fi
+function list() {
+	echo "Unimplemented yet"
+}
 
-	case $1 in
-		show)
-			if [ $# -ne 2 ]; then
-				echo "Usage: $0 show <name>"
+function usage() {
+cat << EOH
+Usage: <option> [name]
+  options:
+	show	show instructions to install package specified by name
+	list	list available packages
+EOH
+}
+
+function main() {
+	case "$1" in
+		"" | -h | --help)
+			usage
+			exit 0
+			;;
+		-s | --show | show)
+			if [ $# -lt 2 ]; then
+				echo "please specified a name to show"
 				exit 1
 			else
-				show "$2"
+				shift
+				while [ $# -ge 1 ]; do
+					show "$1"
+					shift
+				done
 			fi
 			;;
-		list)
+		-l | --list | list)
 			if [ $# -ne 1 ]; then
 				echo "Usage: $0 list"
 				exit 1
+			else
+				list
 			fi
 			;;
 		*)
-			echo "*** error: parameter(s) error"
+			echo "*** error: unrecognized parameter: [$@]"
 			exit 1
 			;;
 	esac
