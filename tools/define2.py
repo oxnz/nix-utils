@@ -1,4 +1,6 @@
 #! /usr/bin/python
+#-*- coding: utf-8 -*-
+
 import re;
 import urllib;
 import urllib2;
@@ -20,25 +22,67 @@ def usage(exit = True, ecode = 0):
     if exit:
         sys.exit(ecode)
 
-def nodedump(node, skipNodeNames):
+def nodedump(node, skipNodeNames, transNodeNames):
+    class Enum(dict):
+        def __getattr__(self, name):
+            if name in self:
+                return self[name]
+            raise AttributeError
+    Color = Enum({
+        'red':  '\033[1;31m',
+        'green':'\033[1;32m',
+        'blue': '\033[1;34m',
+    })
+    Format = Enum({
+        'normal':   '\033[m',
+        'underline':'\033[4m',
+        'bold':     '\033[1m',
+        'default':  '\033[0;49m',
+    })
     if node.nodeName in skipNodeNames:
         pass
     elif node.hasChildNodes():
         #print node.nodeName
+        if node.nodeName in transNodeNames:
+            print Color.blue + Format.bold + transNodeNames[node.nodeName] \
+                    + ':' + Format.normal
+            del transNodeNames[node.nodeName]
         for n in node.childNodes:
-            nodedump(n, skipNodeNames)
+            nodedump(n, skipNodeNames, transNodeNames)
     elif node.nodeValue:
-        print node.nodeValue
+        if node.nodeValue.startswith('http') and '://' in node.nodeValue:
+            print Format.underline + urllib.unquote(node.nodeValue.encode('utf-8')).decode('utf-8') + Format.normal
+        else:
+            print node.nodeValue.replace('<b>', Color.red+Format.bold) \
+                .replace('</b>', Format.normal)
 
 def translate(words, verbose=False):
     xml = urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q="
         + urllib.quote_plus(words) + "&xmlDetail=true&doctype=xml").read();
     dom = minidom.parseString(xml)
-    skipNames = ['#text', 'yodao-link']
+    skipNames = ['#text', 'yodao-link', 'sentence-speech']
     if not verbose:
         skipNames += ['example-sentences', 'yodao-web-dict', 'phonetic-symbol',
-                'return-phrase']
-    nodedump(dom.childNodes[0], skipNames)
+                'return-phrase', 'sentence', 'sentence-translatoin',
+                'similar-words']
+    transNames = {
+            'key': '关键词',
+            #'trans': '翻译',
+            'summary': '概括',
+            'url': '链接',
+            'examples': '例子',
+            'similar-words': '相似单词',
+            #'translation': '翻译',
+            'word-form': '形式',
+            'phonetic-symbol': '音标',
+            'yodao-web-dict': '有道web词典',
+            'example-sentences': '例句',
+            'sentence-pair': '语句对',
+            'sentence': '句子',
+            'sentence-speech': '句子发音',
+            'sentence-translation': '句子翻译',
+    }
+    nodedump(dom.childNodes[0], skipNames, transNames)
 
 def main(argv):
     verbose = False
