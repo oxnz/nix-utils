@@ -5,32 +5,33 @@ import urllib2;
 import sys;
 
 def debug():
-	xml = open("word.xml").read();
-	print get_text(xml);
-	print get_elements_by_path(xml, "custom-translation/content");
-	#print_translations(xml, False, False);
+    xml = open("word.xml").read();
+    print get_text(xml);
+    print get_elements_by_path(xml, "custom-translation/content");
+    #print_translations(xml, False, False);
         
 def get_elements_by_path(xml, elem):
-	if type(xml) == type(''):
-		xml = [xml]
+    if type(xml) == type(''):
+        xml = [xml]
         if type(elem) == type(''):
-		elem = elem.split('/')
-	if (len(xml) == 0):
-		return []
-	elif (len(elem) == 0):
-		return xml
-	elif (len(elem) == 1):
-		result = []
-		for item in xml:
-			result += get_elements(item, elem[0])
-		return result
-	else:
-		subitems = []
-		for item in xml:
-			subitems += get_elements(item, elem[0])
-		return get_elements_by_path(subitems, elem[1:])
+            elem = elem.split('/')
+    if (len(xml) == 0):
+        return []
+    elif (len(elem) == 0):
+        return xml
+    elif (len(elem) == 1):
+        result = []
+        for item in xml:
+            result += get_elements(item, elem[0])
+        return result
+    else:
+        subitems = []
+        for item in xml:
+            subitems += get_elements(item, elem[0])
+        return get_elements_by_path(subitems, elem[1:])
 
 textre = re.compile("\!\[CDATA\[(.*?)\]\]", re.DOTALL)
+
 def get_text(xml):
 	match = re.search(textre, xml)
 	if not match:
@@ -105,8 +106,8 @@ def print_translations(xml, with_color, detailed):
 		        #if not detailed:
 			#        break
 	
-def usage():
-	print """usage: dict options [word|"sentence"]
+def usage(exit = True, ecode = 0):
+    print """usage: dict options [word|"sentence"]
     Options:
         -h  show this message and exit
         word|"sentence": the word you want to translate
@@ -116,15 +117,18 @@ def usage():
         lookup the explanation of word 'hello'
         define "what if"
         lookup the explanation of phrase 'what if'
-        """
+    """
+    if exit:
+        sys.exit(ecode)
 
 def main(argv):
-	if len(argv) <= 0:
-		usage()
-		#debug()
-		sys.exit(1)
-	xml = crawl_xml(" ".join(argv))
-	print_translations(xml, with_color = True, detailed = True)
+    if len(argv) <= 0:
+        usage(True, 1)
+    try:
+        xml = crawl_xml(" ".join(argv))
+        print_translations(xml, with_color = True, detailed = True)
+    except Exception as e:
+        print e
 
 if __name__ == "__main__":
-	main(sys.argv[1:])
+    main(sys.argv[1:])
