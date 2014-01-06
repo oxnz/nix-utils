@@ -1,5 +1,7 @@
 #! /usr/bin/python
 #-*- coding: utf-8 -*-
+#-*- author: Oxnz -*-
+#-*- mail: yunxinyi@gmail.com -*-
 
 import re;
 import urllib;
@@ -11,14 +13,17 @@ def usage(exit = True, ecode = 0):
     print """usage: dict options [word|"sentence"]
     Options:
         -h  show this message and exit
+        -v  show more verbose contents which could contains example
+        sentences and similar words, etc.
         word|"sentence": the word you want to translate
         If you want to translate a sentence, use double quote
     Examples:
         define hello
-        lookup the explanation of word 'hello'
+        lookup a summary explaination of word 'hello'
+        define -v hello
+        lookup a more verbose definition of word 'hello' as well as examples
         define "what if"
-        lookup the explanation of phrase 'what if'
-    """
+        lookup the explanation of phrase 'what if'"""
     if exit:
         sys.exit(ecode)
 
