@@ -2,11 +2,14 @@
 #-*- coding: utf-8 -*-
 #-*- author: Oxnz -*-
 #-*- mail: yunxinyi@gmail.com -*-
+#TODO: add voice choose function
 
 import re;
 import urllib;
 import urllib2;
 import sys;
+import subprocess
+import tempfile
 from xml.dom import minidom
 
 def usage(exit = True, ecode = 0):
@@ -26,6 +29,18 @@ def usage(exit = True, ecode = 0):
         lookup the explanation of phrase 'what if'"""
     if exit:
         sys.exit(ecode)
+
+def sayit(words, English=False):
+    type_ = '0'
+    if English:
+        type_ = '1'
+    wav = urllib2.urlopen("http://dict.youdao.com/dictvoice?audio="
+            + urllib.quote_plus(words) + "&type=" + type_).read()
+    file_ = tempfile.NamedTemporaryFile("wb", bufsize = 0, suffix=".wav", \
+            delete = True)
+    file_.write(wav)
+    subprocess.call(['/usr/bin/afplay', file_.name])
+    file_.close()
 
 def nodedump(node, skipNodeNames, transNodeNames):
     class Enum(dict):
@@ -61,7 +76,8 @@ def nodedump(node, skipNodeNames, transNodeNames):
             print node.nodeValue.replace('<b>', Color.red+Format.bold) \
                 .replace('</b>', Format.normal)
 
-def translate(words, verbose=False):
+
+def translate(words, verbose=False, sayit_=False):
     xml = urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q="
         + urllib.quote_plus(words) + "&xmlDetail=true&doctype=xml").read();
     dom = minidom.parseString(xml)
@@ -88,16 +104,28 @@ def translate(words, verbose=False):
             'sentence-translation': '句子翻译',
     }
     nodedump(dom.childNodes[0], skipNames, transNames)
+    if sayit_:
+        sayit(words)
 
 def main(argv):
     verbose = False
-    if len(argv) <= 0 or (argv[0] == '-v' and len(argv) == 1):
+    sayit = False
+    for arg in argv:
+        if arg.startswith('-'):
+            if 'h' in arg:
+                usage(True, 0)
+            if 'v' in arg:
+                verbose = True
+            if 's' in arg:
+                sayit = True
+            if len(arg.replace('v', '').replace('s', '')) > 1:
+                print 'unrecognized option: ', arg
+                sys.exit(1)
+    argv[:] = filter(lambda arg: not '-' in arg, argv)
+    if len(argv) <= 0:
         usage(True, 1)
-    if argv[0] == '-v':
-        verbose = True
-        del argv[0]
     try:
-        translate(" ".join(argv), verbose)
+        translate(" ".join(argv), verbose, sayit)
     except Exception as e:
         print e
 
