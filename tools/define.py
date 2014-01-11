@@ -121,7 +121,8 @@ def main(argv):
             if len(arg.replace('v', '').replace('s', '')) > 1:
                 print 'unrecognized option: ', arg
                 sys.exit(1)
-    argv[:] = filter(lambda arg: not '-' in arg, argv)
+    #argv[:] = filter(lambda arg: not '-' in arg, argv)
+    argv[:] = filter(lambda arg: not arg.startswith('-'), argv)
     if len(argv) <= 0:
         usage(True, 1)
     try:
