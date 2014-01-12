@@ -16,6 +16,7 @@ def usage(exit = True, ecode = 0):
     print """usage: dict options [word|"sentence"]
     Options:
         -h  show this message and exit
+        -s  pronouce the specified words or sentence
         -v  show more verbose contents which could contains example
         sentences and similar words, etc.
         word|"sentence": the word you want to translate
@@ -121,7 +122,6 @@ def main(argv):
             if len(arg.replace('v', '').replace('s', '')) > 1:
                 print 'unrecognized option: ', arg
                 sys.exit(1)
-    #argv[:] = filter(lambda arg: not '-' in arg, argv)
     argv[:] = filter(lambda arg: not arg.startswith('-'), argv)
     if len(argv) <= 0:
         usage(True, 1)
