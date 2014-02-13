@@ -4,20 +4,15 @@ use strict;
 use warnings;
 
 my @vmstat = `vm_stat`;
-my %meminfo = (
-	'Page size' => scalar(shift @vmstat) =~ /(\d+)/,
-);
-
-foreach (@vmstat) {
+my ($pagesz) = scalar(shift @vmstat) =~ /(\d+)/;
+my %meminfo = map {
 	chomp;
 	my ($k, $v) = split /\s{2,}/;
-	$meminfo{$k} = int($v);
-}
+	$k => hsz($pagesz * int($v))
+} @vmstat;
 
 foreach (sort keys %meminfo) {
-	print $_,
-	' ' x (40 - length),
-	hsz($meminfo{$_} * $meminfo{'Page size'}), "\n";
+	print $_, ' ' x (40 - length), $meminfo{$_}, "\n";
 }
 
 # human-readable size
