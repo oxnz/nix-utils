@@ -25,9 +25,6 @@ sub hsz{
 	my $size = shift;
 	my @suffix = qw/B KB MB GB TB PB/;
 	my $i = 0;
-	while ($size >= 1024) {
-		$size /= 1024;
-		++$i;
-	}
+	++$i and $size /= 1024 while ($size >= 1024);
 	return sprintf("%-8.2f %s", $size, $suffix[$i]);
 }
