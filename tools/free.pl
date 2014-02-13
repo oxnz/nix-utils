@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 my @vmstat = `vm_stat`;
-my %meminfo = ( 'Page size' => `sysctl -n hw.pagesize` );
-
-shift @vmstat;
+my %meminfo = (
+	'Page size' => scalar(shift @vmstat) =~ /(\d+)/,
+);
 
 foreach (@vmstat) {
 	chomp;
