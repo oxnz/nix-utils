@@ -12,7 +12,7 @@ sub filestat {
 	$fstat{'uid'} .= "(" . scalar(getpwuid($fstat{'uid'})) . ")";
 	$fstat{'gid'} .= "(" . scalar(getgrgid($fstat{'gid'})) . ")";
 	foreach ("file", @statnames) {
-		$fstat{$_} = localtime $fstat{$_} if /time$/;
+		$fstat{$_} = localtime $fstat{$_} if /^[amc]time$/;
 		print $_, " " x (10 - length), $fstat{$_}, "\n";
 	}
 }
