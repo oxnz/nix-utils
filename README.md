@@ -1,4 +1,4 @@
-# commonly used shell scripts
+# linux/unix utils
 
 ##gnu-apt.pl
 
