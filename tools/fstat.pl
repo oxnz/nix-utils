@@ -21,8 +21,26 @@ sub main {
 	foreach (@ARGV) {
 		if (-e) {
 			filestat;
+		} elsif (/^-{1,2}\w/) {
+			if (/-h|--help/) {
+				print <<EOH;
+Usage: $0 [option] <files>
+  options:
+    -h  --help    show this help message and exit
+    -v  --version show version info and exit
+EOH
+				exit
+			} elsif (/-v|--version/) {
+				print <<EOV;
+$0 version 0.1, authorized by oxnz
+EOV
+				exit
+			} else {
+				print "*** error: unrecognized option: $_\n";
+				exit 1
+			}
 		} else {
-			print "not a valid file: $_\n";
+			print "*** error: not a valid file: $_, skipped\n";
 		}
 	}
 }
