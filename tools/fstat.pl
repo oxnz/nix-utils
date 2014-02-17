@@ -5,13 +5,15 @@ use warnings;
 
 sub filestat {
 	my %fstat;
-	my @statnames = qw/dev ino mode nlink uid gid rdev size atime mtime
+	my @statnames = qw/dev inode mode nlink uid gid rdev size atime mtime
 	ctime blksize blocks/;
 	@fstat{@statnames} = stat;
-	print "file:\t$_\n";
-	foreach (@statnames) {
+	$fstat{'file'} = $_;
+	$fstat{'uid'} .= "(" . scalar(getpwuid($fstat{'uid'})) . ")";
+	$fstat{'gid'} .= "(" . scalar(getgrgid($fstat{'gid'})) . ")";
+	foreach ("file", @statnames) {
 		$fstat{$_} = localtime $fstat{$_} if /time$/;
-		print $_, ":\t", $fstat{$_}, "\n";
+		print $_, " " x (10 - length), $fstat{$_}, "\n";
 	}
 }
 
