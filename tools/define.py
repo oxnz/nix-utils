@@ -75,7 +75,8 @@ def nodedump(node, skipNodeNames, transNodeNames):
             print Format.underline + urllib.unquote(node.nodeValue.encode('utf-8')).decode('utf-8') + Format.normal
         else:
             print node.nodeValue.replace('<b>', Color.red+Format.bold) \
-                .replace('</b>', Format.normal)
+                .replace('</b>', Format.normal).replace('&lt;', '<') \
+                .replace('&gt;', '>')
 
 
 def translate(words, verbose=False, sayit_=False):
