@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # Copyright (C) 2013 Oxnz, All rights reserved.
 
-require 'net/http'
-
 def help
 	puts <<-EOH
 Usage: #{$PROGRAM_NAME} <option> [name]
@@ -50,13 +48,12 @@ ARGV.each do |arg|
 	case arg
 	when "-h", "--help"
 		help
-		exit
 	when "-l", "--list"
 		exit list
 	when "-s", "--show"
+		require 'net/http'
 		ARGV.shift
 		ARGV.each {|name| show(name)}
-		exit
 	else
 		puts "*** error: unrecognized parameter: #{arg}"
 		exit 1
