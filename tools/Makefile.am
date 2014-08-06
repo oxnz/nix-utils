@@ -24,3 +24,7 @@ free: free.pl Makefile
 fstat: fstat.pl Makefile
 	$(do_subst) < $(srcdir)/$< > $@
 	chmod +x $@
+
+dpics: dpcis.py
+	$(do_subst) < $(srcdir)/$< > $@
+	chmod +x $@
