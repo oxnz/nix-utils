@@ -23,7 +23,7 @@ all=""
 while read line
 do
 #	if [ "$(echo $line | awk '{print $2}')" = "male" ]
-	if [ "`echo $line | awk '{print $2}'`" = "male" ]
+	if [ "$(echo $line | awk '{print $2}')" = "male" ]
 	then
 		all="$all $line"
 	fi
@@ -31,10 +31,10 @@ done < data
 echo $all
 
 all=""
-THE_INPUT=`ps ef`
+THE_INPUT=$(ps ef)
 while read line
 do
-	if [ "`echo $line | awk '{print $2}'`" = "pts/0" ]
+	if [ "$(echo $line | awk '{print $2}')" = "pts/0" ]
 	then
 		all="$all $line"
 	fi

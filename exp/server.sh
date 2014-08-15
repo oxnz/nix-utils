@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USERNAME=`whoami`
-USERID=`id -u`
+USERNAME=$(whoami)
+USERID=$(id -u)
 
 help()
 {

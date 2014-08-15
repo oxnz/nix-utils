@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my @vmstat = `vm_stat`;
+my @vmstat = $(vm_stat);
 my ($pagesz) = scalar(shift @vmstat) =~ /(\d+)/;
 my %meminfo = map {
 	chomp;

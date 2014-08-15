@@ -7,7 +7,7 @@
 # TODO:
 # add restart entry
 
-#if [ `id -u` -ne 0 ]; then
+#if [ $(id -u) -ne 0 ]; then
 #	echo "Root privilege needed"
 #	exit 255
 #fi
@@ -54,7 +54,7 @@ doOption()
 			unset cmd
 			;;
 		status)
-			tpid=`ps -ef | grep [t]omcat | grep -v status | awk '{print $2}'`
+			tpid=$(ps -ef | grep [t]omcat | grep -v status | awk '{print $2}')
 			[ "$tpid" ] && echo "tomcat is running with pid: $tpid" || echo "tomcat is not running"
 			unset tpid
 			;;

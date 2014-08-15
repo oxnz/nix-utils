@@ -18,7 +18,7 @@ else
 fi
 
 declare -a array
-array=`ls`
+array=$(ls)
 array=([0]=zerooo [5]=five [2]=two)
 
 for i in ${array[@]}

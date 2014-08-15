@@ -1,6 +1,6 @@
 #!/bin/bash
 
-whatami=`basename $0`
+whatami=$(basename $0)
 
 case $whatami in
 	greet)
