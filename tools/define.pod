@@ -1,0 +1,58 @@
+=pod
+
+=encoding utf8
+
+=head1 NAME
+
+define - dictionary lookup tool
+
+=head1 SYNOPSIS
+
+dict options [word|"sentence"]
+
+=head1 DESCRIPTION
+
+B<define> will lookup specified word|"sentence" online, and return print the
+definition to the terminal.
+
+=head1 Options:
+
+B<-h>
+
+show this message and exit
+
+B<-s>
+
+pronouce the specified words or sentence
+
+B<-v>
+
+show more verbose contents which could contains example sentences and similar words, etc.
+
+B<word|"sentence">
+
+the word you want to translate. If you want to translate a sentence, use double quote
+
+=head1 EXAMPLES
+
+=over 8
+
+=item B<define hello>
+
+lookup a summary explaination of word 'hello'
+
+=item B<define -v hello>
+
+lookup a more verbose definition of word 'hello' as well as examples
+
+=item B<define "what if">
+
+lookup the explanation of phrase 'what if'
+
+=back
+
+=head1 BUGS
+
+Bugs report address: L<https://github.com/oxnz/nix-utils>
+
+=cut
