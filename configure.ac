@@ -15,6 +15,7 @@ AC_PROG_LN_S
 # Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.
+AM_CONDITIONAL([OSX], [test $(uname -s) = Darwin])
 
 # Checks for library functions.
 

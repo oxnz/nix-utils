@@ -1,7 +1,10 @@
-dist_bin_SCRIPTS = brew \
-				   define \
+dist_bin_SCRIPTS = define
+if OSX
+	bin_scripts += brew \
 				   free \
 				   fstat
+endif
+
 CLEANFILES = $(dist_bin_SCRIPTS)
 EXTRA_DIST = define.py \
 			 free.pl
