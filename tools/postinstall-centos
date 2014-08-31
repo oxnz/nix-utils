@@ -1,0 +1,9 @@
+remove:
+	gnome-tweak-tool
+install:
+	ibus-libpinyin automake autoconf evolution
+	kernel-devel # nvidia
+	git-core
+	gcc
+	perf
+	zsh
