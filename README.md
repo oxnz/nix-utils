@@ -32,6 +32,27 @@ bird | a small dns server | nix
 define | a program to lookup english words definition from internet | nix
 free | show memory usage statistics on osx | oxs
 rmbom | remove software installs on osx | osx
+ipinfo | get info for IP | nix
+
+## Screenshots
+
+### ipinfo
+
+```
+$ ipinfo
+ip       => 119.32.139.201
+hostname => No Hostname
+city     => Guangdong
+region   => Jilin
+country  => CN
+loc      => lat: 129.3364, lon: 42.7683
+org      => AS17622 China Unicom Guangzhou network
+$
+```
+
+### define
+
+![define hello](./define.png "define hello")
 
 ## Contributing
 
