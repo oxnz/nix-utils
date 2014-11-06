@@ -52,7 +52,7 @@ $
 
 ### define
 
-![define hello](./define.png "define hello")
+![define hello](./screenshots/define.png "define hello")
 
 ## Contributing
 
