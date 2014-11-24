@@ -5,6 +5,8 @@
 #TODO: add voice choose function
 
 import re;
+import os
+import anydbm
 import urllib;
 import urllib2;
 import sys;
@@ -12,31 +14,15 @@ import subprocess
 import tempfile
 from xml.dom import minidom
 
-def usage(exit = True, ecode = 0):
-    print """usage: dict options [word|"sentence"]
-    Options:
-        -h  show this message and exit
-        -s  pronouce the specified words or sentence
-        -v  show more verbose contents which could contains example
-        sentences and similar words, etc.
-        word|"sentence": the word you want to translate
-        If you want to translate a sentence, use double quote
-    Examples:
-        define hello
-        lookup a summary explaination of word 'hello'
-        define -v hello
-        lookup a more verbose definition of word 'hello' as well as examples
-        define "what if"
-        lookup the explanation of phrase 'what if'"""
-    if exit:
-        sys.exit(ecode)
-
-def sayit(words, English=False):
+def sayit(word, English=False):
+    print >> sys.stderr, "sound current not supported"
+    return
     type_ = '0'
     if English:
         type_ = '1'
-    wav = urllib2.urlopen("http://dict.youdao.com/dictvoice?audio="
-            + urllib.quote_plus(words) + "&type=" + type_).read()
+    uri = 'http://dict.youdao.com/dictvoice?audio={}&type={}'.format(
+            urllib.quote_plus(word), type_)
+    wav = urllib2.urlopen(uri).read()
     file_ = tempfile.NamedTemporaryFile("wb", bufsize = 0, suffix=".wav", \
             delete = True)
     file_.write(wav)
@@ -78,11 +64,41 @@ def nodedump(node, skipNodeNames, transNodeNames):
                 .replace('</b>', Format.normal).replace('&lt;', '<') \
                 .replace('&gt;', '>')
 
+def reqdef(words):
+    '''request definition'''
+    return urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q="
+        + urllib.quote_plus(words) + "&xmlDetail=true&doctype=xml").read()
 
-def translate(words, verbose=False, sayit_=False):
-    xml = urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q="
-        + urllib.quote_plus(words) + "&xmlDetail=true&doctype=xml").read();
-    dom = minidom.parseString(xml)
+class dbopen(object):
+    def __init__(self, dbfile):
+        self._dbfile = dbfile
+        self._db = None
+
+    def __enter__(self):
+        self._db = anydbm.open(self._dbfile, 'c')
+        return self._db
+
+    def __exit__(self, type, value, tb):
+        if self._db:
+            self._db.close()
+
+def lookup(wordlist, dbfile, verbose, sound):
+    if dbfile:
+        with dbopen(dbfile) as db:
+            for word in wordlist:
+                xml = db.get(word)
+                if not xml:
+                    xml = reqdef(word)
+                    db[word] = xml
+                sound and sayit(word)
+                translate(xml, verbose)
+    else:
+        for word in wordlist:
+            sound and sayit(word)
+            translate(reqdef(word), verbose)
+
+def translate(xmldoc, verbose=False):
+    dom = minidom.parseString(xmldoc)
     skipNames = ['#text', 'yodao-link', 'sentence-speech']
     if not verbose:
         skipNames += ['example-sentences', 'yodao-web-dict', 'phonetic-symbol',
@@ -106,33 +122,34 @@ def translate(words, verbose=False, sayit_=False):
             'sentence-translation': '句子翻译',
     }
     nodedump(dom.childNodes[0], skipNames, transNames)
-    if sayit_:
-        sayit(words)
 
-def main(argv):
-    verbose = False
-    sayit = False
-    for arg in argv:
-        if arg.startswith('-'):
-            if 'h' in arg:
-                usage(True, 0)
-            if 'v' in arg:
-                verbose = True
-            if 's' in arg:
-                sayit = True
-            if len(arg.replace('v', '').replace('s', '')) > 1:
-                print 'unrecognized option: ', arg
-                sys.exit(1)
-    argv[:] = filter(lambda arg: not arg.startswith('-'), argv)
-    if len(argv) <= 0:
-        usage(True, 1)
-    try:
-        translate(" ".join(argv), verbose, sayit)
-    except Exception as e:
-        print e
+def optparse():
+    import argparse
+    parser = argparse.ArgumentParser(
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            description="lookup word definition online")
+    parser.add_argument('-d', '--db', metavar='db', help='use local cache file to avoid unnecessary network access')
+    parser.add_argument('-s', '--sound', help='pronouce the specified words or sentence', action='store_true')
+    parser.add_argument('-v', '--verbose', help='show more verbose contents which could contains example', action='store_true')
+    parser.add_argument(metavar='word|sentence', dest='wordlist', nargs='+', help='the word you want to translate')
+    parser.epilog = '''
+Examples:
+    %(prog)s hello
+    lookup a summary explaination of word 'hello'
+    %(prog)s -v hello
+    lookup a more verbose definition of word 'hello' as well as examples
+    %(prog)s "what if"
+    lookup the explanation of phrase 'what if'
+    '''
+    parser.set_defaults(db = None)
+    return parser.parse_args()
+
+def main(args):
+    lookup(args.wordlist, args.db, args.verbose, args.sound)
 
 if __name__ == "__main__":
     try:
-        main(sys.argv[1:])
+        args = optparse()
+        main(args)
     except KeyboardInterrupt:
         print "CTRL-C, Canceled"
