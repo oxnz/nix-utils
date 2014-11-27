@@ -8,6 +8,7 @@ import re;
 import os
 import anydbm
 import urllib;
+import argparse
 import urllib2;
 import sys;
 import subprocess
@@ -58,7 +59,7 @@ def nodedump(node, skipNodeNames, transNodeNames):
             nodedump(n, skipNodeNames, transNodeNames)
     elif node.nodeValue:
         if node.nodeValue.startswith('http') and '://' in node.nodeValue:
-            print Format.underline + urllib.unquote(node.nodeValue.encode('utf-8')).decode('utf-8') + Format.normal
+            print Format.underline + urllib.unquote(node.nodeValue) + Format.normal
         else:
             print node.nodeValue.replace('<b>', Color.red+Format.bold) \
                 .replace('</b>', Format.normal).replace('&lt;', '<') \
@@ -70,12 +71,13 @@ def reqdef(words):
         + urllib.quote_plus(words) + "&xmlDetail=true&doctype=xml").read()
 
 class dbopen(object):
-    def __init__(self, dbfile):
+    def __init__(self, dbfile, mode):
         self._dbfile = dbfile
+        self._mode = mode
         self._db = None
 
     def __enter__(self):
-        self._db = anydbm.open(self._dbfile, 'c')
+        self._db = anydbm.open(self._dbfile, self._mode)
         return self._db
 
     def __exit__(self, type, value, tb):
@@ -84,7 +86,7 @@ class dbopen(object):
 
 def lookup(wordlist, dbfile, verbose, sound):
     if dbfile:
-        with dbopen(dbfile) as db:
+        with dbopen(dbfile, 'c') as db:
             for word in wordlist:
                 xml = db.get(word)
                 if not xml:
@@ -96,6 +98,20 @@ def lookup(wordlist, dbfile, verbose, sound):
         for word in wordlist:
             sound and sayit(word)
             translate(reqdef(word), verbose)
+
+def listdict(listmode, dbfile, verbose):
+    with dbopen(dbfile, 'c') as db:
+        if listmode == 'name' and verbose < 2:
+            def traverse(word):
+                print word
+        else:
+            def traverse(word):
+                translate(db.get(word), verbose - 2)
+        for word in db:
+            try:
+                traverse(word)
+            except Exception as e:
+                print 'error: {}, word: {}'.format(e, word)
 
 def translate(xmldoc, verbose=False):
     dom = minidom.parseString(xmldoc)
@@ -124,14 +140,16 @@ def translate(xmldoc, verbose=False):
     nodedump(dom.childNodes[0], skipNames, transNames)
 
 def optparse():
-    import argparse
     parser = argparse.ArgumentParser(
             formatter_class=argparse.RawDescriptionHelpFormatter,
             description="lookup word definition online")
+    parser.add_argument('-v', '--verbose', help='show more verbose contents which could contains example', action='count')
     parser.add_argument('-d', '--db', metavar='db', help='use local cache file to avoid unnecessary network access')
+    parser.add_argument('-l', '--list', nargs='?', dest='listmode', const='name', default='name',
+            choices=['name', 'normal', 'verbose'],
+            help='list all the cached statistics')
     parser.add_argument('-s', '--sound', help='pronouce the specified words or sentence', action='store_true')
-    parser.add_argument('-v', '--verbose', help='show more verbose contents which could contains example', action='store_true')
-    parser.add_argument(metavar='word|sentence', dest='wordlist', nargs='+', help='the word you want to translate')
+    parser.add_argument(metavar='word|sentence', dest='wordlist', nargs='*', help='the word you want to translate')
     parser.epilog = '''
 Examples:
     %(prog)s hello
@@ -141,11 +159,15 @@ Examples:
     %(prog)s "what if"
     lookup the explanation of phrase 'what if'
     '''
-    parser.set_defaults(db = None)
+    parser.set_defaults(db = None, listmode = None, verbose = 0)
     return parser.parse_args()
 
 def main(args):
-    lookup(args.wordlist, args.db, args.verbose, args.sound)
+    print args
+    if args.listmode:
+        listdict(args.listmode, args.db, args.verbose)
+    else:
+        lookup(args.wordlist, args.db, args.verbose, args.sound)
 
 if __name__ == "__main__":
     try:
