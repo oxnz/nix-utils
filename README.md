@@ -1,4 +1,4 @@
-# linux/unix utils
+# nix-utils
 
 ## Overview
 This repo contains a bunch of utils for linux and/or unix systems.
@@ -52,24 +52,42 @@ $
 
 ### define
 
-![define hello](./screenshots/define.png "define hello")
+```
+$ define hello
+hello
+int. 喂；哈罗
+n. 表示问候， 惊奇或唤起注意时的用语
+n. (Hello)人名；(法)埃洛
+形式:
+复数
+hellos或helloes
+过去式
+helloed
+过去分词
+helloed
+现在分词
+helloing
+链接:
+an expression of greeting
+例子:
+every morning they exchanged polite hellos
+```
+![define hello](./screenshots/define.png "define hello")  
 
 ## Contributing
 
 Once you've made your great commits:
 
-1. [Fork][fk] Mustache
+1. [Fork][fk] nix-utils
 2. Create a topic branch - `git checkout -b my_branch`
 3. Push to your branch - `git push origin my_branch`
 4. Create an [Issue][is] with a link to your branch
 5. That's it!
 
-You might want to checkout Resque's [Contributing][cb] wiki page for information
+You might want to checkout nix-utils's [Contributing][cb] wiki page for information
 on coding standards, new features, etc.
 
 Alternatively if you find a bug, you can [open an issue][is].
-
-
 
 [cb]: http://wiki.github.com/oxnz/nix-utils/contributing
 [fk]: http://help.github.com/forking/
