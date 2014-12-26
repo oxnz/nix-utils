@@ -163,7 +163,6 @@ Examples:
     return parser.parse_args()
 
 def main(args):
-    print args
     if args.listmode:
         listdict(args.listmode, args.db, args.verbose)
     else:

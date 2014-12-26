@@ -1,7 +1,6 @@
 #!/bin/sh
 # Copyright (C) 2013 Oxnz, All rights reserved.
 
-
 URL='https://raw.github.com/Homebrew/homebrew/master/Library/Formula/'
 
 function show() {
