@@ -10,21 +10,56 @@ import sys
 import os
 import threading
 
-def getfname(url):
+def get_fname(url):
     index = url.rfind('/')
     if index == -1:
         raise RuntimeError('malformed url: [{}]'.format(url))
-    name = index[index+1:]
+    name = url[index+1:]
     if len(name) == 0:
-        return getfname(url[:-1])
+        return get_fname(url[:-1])
     return name
+
+def get_title(html):
+    suffix = '</title>'
+    end = html.find(suffix)
+    title = 'Untitled'
+    if end == -1:
+        return title
+    begin = html.rfind('>', 0, end)
+    if begin == -1:
+        return title
+    begin = begin + 1
+    title = html[begin:end]
+    title = title.decode('gbk')
+    title = title.encode('utf-8')
+    return title
+
+def get_nextp(url, html):
+    prefix = '/News'
+    begin = html.find(prefix)
+    if begin == -1:
+        return None
+    end = html.find('>', begin + len(prefix))
+    if end == -1:
+        return None
+    suffix = html[begin:end]
+    begin = url.find(prefix)
+    if begin == -1:
+        return None
+    return url[:begin] + suffix
+
+Q = False
+
+def sig_handler(signo, frame):
+    print 'signal caught: {}, quit flag was set'.format(signo)
+    Q = True
 
 class Task(threading.Thread):
     def __init__(self, url, path):
         super(Task, self).__init__()
         self.url = url
         self.path = path
-        self._fname = getfname(url)
+        self._fname = get_fname(url)
         self.fpath = os.path.join(path, self._fname)
 
     @property
@@ -44,12 +79,15 @@ class Task(threading.Thread):
 
 def download(url, pattern):
     html = urllib2.urlopen(url).read()
-    fname = getfname(url)
+    title = get_title(html)
+    print '++ {} ++'.format(title)
+    fname = get_fname(url)
     with open(fname, 'w') as f:
         f.write(html)
     taskq = []
-    for (url, pdname, dname) in pattern.findall(html):
-        taskq.append(Task(url, os.path.join(pdname, dname)))
+    for (link, pdname, dname) in pattern.findall(html):
+        task = Task(link, os.path.join(pdname, dname))
+        taskq.append(task)
         sys.stdout.write('+ {}\n'.format(task.fname))
     for task in taskq:
         task.start()
@@ -57,6 +95,9 @@ def download(url, pattern):
         task.join()
         sys.stdout.write('- {}\n'.format(task.fname))
         sys.stdout.flush()
+    url = get_nextp(url, html)
+    if not Q and url:
+        download(url, pattern)
 
 if __name__ == '__main__':
     # TODO: add optparse to support option parse
@@ -70,6 +111,7 @@ if __name__ == '__main__':
         sys.exit(1)
     pattern = re.compile('(http.*?(\d{6})/(\d+)/\d+\.jpg)')
     #pattern = re.compile(sys.argv[1])
+    signal(signal.SIGINT, sig_handler)
     for url in sys.argv[2:]:
         try:
             download(url, pattern)
