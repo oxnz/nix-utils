@@ -52,6 +52,7 @@ Q = False
 
 def sig_handler(signo, frame):
     print 'signal caught: {}, quit flag was set'.format(signo)
+    global Q
     Q = True
 
 class Task(threading.Thread):
@@ -96,6 +97,7 @@ def download(url, pattern):
         sys.stdout.write('- {}\n'.format(task.fname))
         sys.stdout.flush()
     url = get_nextp(url, html)
+    global Q
     if not Q and url:
         download(url, pattern)
 
